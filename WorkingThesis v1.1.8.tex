@@ -1,0 +1,175 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}%codification of the document
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{upgreek} 
+
+
+
+\title{Working thesis}
+\author{Heather E. Dempsey 
+\thanks{JEL: C32 , C53 \newline
+	KEYWORDS: State-space model, Kalman filter, expectation-maximization algorithm, vector autoregression, rolling ordinary least squares, Markov Chain Monte Carlo, time-varying parameters}} 
+\date{April 2021}
+
+%Here begins the body of the document
+\begin{document}
+	
+	\begin{titlepage}
+		\maketitle
+	\end{titlepage}
+	
+	\begin{abstract}
+		Parameter optimization is vital in quantitative forecasts. 
+		
+		Non-stationary stochastic variables are of particular interest in finance. This thesis investigates SSM methodology versus both traditional OLS in a race to produce the best linear unbiased estimators. A parameter optimization problem.   Root mean squared error, mean absolute error and out-of-sample $ R^2 $ are the goodness of fit measures used to evaluate model performance.
+	\end{abstract}
+
+
+\section{Introduction}
+REWRITE
+Any\ method could be chosen to forecast but when assumptions are adhered to and there are still more than one method to choose, how do we determine the better model? Can traditional methods be lagging behind new multi-disciplinary models.
+… 
+What kind of problems does em solve? Why am I comparing these two in particular? Why did I choose a var setup for the state equation?
+
+	… 
+\section{Literature Review}
+Although a series of papers had been previously published by Hartley(1958), Carter and Myers (1973), Brown (1974), and Fienberg and Chen (1976) with specific applications, EM was first formally defined in 1977 by Dempster, Laird and Rubin in their seminal paper Maximum Likelihood from Incomplete Data via the EM Algorithm. Deriving theory which highlights the monotonic behavior of the likelihood using the estimates of unobservable data as proxy for complete data and then parameterized over log-likelihood. Their paper, in which they worked through many examples of EM of hidden data problems, popularized the method after showing convergence of the estimators to their true values. 
+Shumway and Stoffer (1982) developed the EM further to estimate the parameters of an underlying state-space model (SSM) using missing observations. 
+
+Wu, Pai, and Hosking (1995) also estimated the time-series parameters  employing the EM cast into state-space form. Following Shumway and Stoffer (1982), this algorithm includes both KF and MLE methods. This model is shown to have numerous applications, not only to econometrics but also to any discipline dealing with unknown factors and incomplete information for example COVID-19 vaccine developers. 
+Cochrane (2008) sought to examine how predictive results from a vector autoregressive (VAR) model should be interpreted. He finds that a SSM does not improve the forecasting of returns over the VAR method. 
+Kojima et al., 2010 wrote a study based on biology, which uses the state space representation of VAR (1) where there are more than one time series regressed on lagged values of itself. The authors address the fact that non equally spaced data observations and their system noises as being inseparable severely limiting in working with both the VAR and SSMs. Authors merge the two models to overcome these limitations and create a new model the—VAR-SSM—to estimate dynamic gene networks. The model uses the transition and observation equations that ultimately motivate the SSM general representation in this thesis. Kojima et al. (2010) derive an algorithm for estimating the parameters of VAR-SSM and the EM finding that the VAR SSM performs better than the AR and SSM taken separately in contrast to Cochrane’s 2008 study. 
+Nakjima (2011) outlined estimation procedures that model existing changes in the underlying structure of the economy. His approach was a Markov Chain Monte Carlo simulation exercise using a multivariate AR model with stochastic volatility. Nakjima engages the KF to estimate the hidden vector of parameters. He found that in the presence of missing data, the SSM infers the initial vector of parameters more efficiently and will updates them with successive iteration. Similar to the research by Nakjima (2011) the present study utilizes methods such as Bayesian analysis in updating, Markov Chain Monte Carlo (MCMC) to simulate conditions from which to test my models’ performance and the KF to estimate unobservable data. 
+In 2012, Doh and Connolly successfully estimated time-varying parameters (TVP) in the presence of stochastic volatility using both VAR and KF limited to estimating unobservable data. Bayesian methods of updating were used on the parameters of three macroeconomic variables during the recession of 2007—2009. They found the recession was accelerated by the shock to the unemployment rate that disrupted trend and volatility. These authors disagreed with Cochrane (2008), observing that the KF is necessary for the estimation of unobserved data in a VAR model where coefficients can vary. 
+
+	
+\section{Theoretical background}
+In this section, I provide the framework leading to the development of the central contribution of this thesis. The fundamental theory I present is the minimum necessary to understand the optimization procedure and results. Each subsection below will discuss one of the relevant models. 
+	
+	\subsection{Markov process}
+A Markov process describes a system where only the current state and one before it matter when forecasting. In probability theory Markov processes model systems that are changing, randomly. And that no previous datum can shed new light on the expected future state. Markov chains, discrete Markov processes, were the focus of a series of papers..(combine with below) 
+In the late 1960’s, Baum and Welch developed a special case of the EM. The specific application had been sketched out in series of papers examining Markov chains (Zuckerman, 2019); discrete Markov processes. The resulting algorithm defines a ‘state’ as one that is assumed to be constantly changing. This 'state' then can only be described by its particular parameters at time $t$.
+	
+	\subsection{Hidden Markov model} 
+The hidden Markov model (HMM) earned its name by describing those stochastic processes having unobservable states. The HMM class are simply Markov chains observed in noise (Lauri, 2014). The realizations of $y_t$ can be observed, but the latent state $x_t$ variable driving the change in $y_t$, remains hidden.   
+	
+	\subsection{Gaussian mixture model}
+Unobserved heterogeneity persists in financial time series. An infinite number of distinct data clusters belonging to an equally infinite number of differing distributions exist. These clusters themselves came from somewhere, a greater data-generating distribution. In the sciences, these individual clusters with their independent distributions are often hidden and all jumbled together. The problem, therefore, is clear: how can they be estimated? The method K-means1 in engineering applications is the Gaussian mixture model (GMM).The difference is K-means measures distances where K distributions calculates weights. Developed to estimate the distribution of unobservable clusters of data mixed with other hidden data clusters, all following heterogeneous distributions. To start, assume that there are two random overlapping normal distributions with means mu1, mu2 and variances sigma1, sigma2. As each new datum comes in, the IMM calculates the probability that the data point came from either the first or the second normal random distribution. With the results, the mean and the variance are then recalculated, growing closer to the true distribution. Each iteration uses Bayes theorem to calculate conditional probability, allowing the algorithm to update. 
+	In Bayes theorem, there is a notion of ‘a priori’ and a ‘posteriori’. These translate roughly to ‘belief before evidence’ and ‘updated belief or after the fact’, respectively. It is often thought that the probability is constant, but this notion is wrong. In light of new evidence, a person’s belief set is unavoidably altered, and their previous assessment of the probability for the same event is updated. This state is called a posteriori. Bayes theorem defines the probability of event A given that event B has occurred as equal to the probability of A multiplied by the probability of event B given that the event A has occurred all over the probability of event B occurring as conditional probability:
+		
+	\begin{equation}
+	\label{eq:bayes}
+	P(\theta|\textbf{D}) = P(\theta ) \frac{P(\textbf{D} |\theta)}{P(\textbf{D})} 
+	\end{equation}
+
+	\subsection{Direct numerical maximization}
+		Gradient-based optimization algorithm designed to iterate, recursively, through a set of equations. With each pass calculating the conditional likelihood of each parameter (Lauri, 2014). The derivative of the likelihood function with respect to the parameters and set equal to zero to find the extrema. Dempster(1977) noted this could only be a local, not global, maximum. (and gradient descent) direct optimization (finding the points where the partial derivatives are null)mle can be done in many ways, The MLE of GMMs is not done using those methods for a number of reasons that I will explain. But I leave that for the end of the article because I want to get to the most relevant materials first. The MLE of GMMs is done using the expectation-maximization algorithm. Because gradient descents are solved with differentiation we cannot use on a random variable and this is why we need the expectation-maximization.
+	
+	
+	\subsection{Forward-backward algorithm}
+	The goal of the forward-backward algorithm (FB) is to find the conditional distribution of the hidden data and to send messages about that data back and forth (Mader et al., 2014; Sridharan, 2020). The FB algorithm computes 
+	
+	\subsection{Expectation-maximization}
+	The goal is to maximize the likelihood the parameters are unbiased. The problem is the maximum likelihood function cannot work with incomplete or hidden data.  This is where the EM steps in.
+	Composed of..
+	The property of EM that guarantees the next estimate will be better than the one before it is monotonicity shown with Jensen’s inequality. These estimates will converge to a local maximum likelihood value, however not necessarily a global maximum (Dempster et al., 1977). 
+	I propose  an estimation method using the EM decomposed into a KF with linear state equation set up as a VAR(1). There are 8 free parameters to be estimated.  
+
+
+
+	\section{Methodology}
+	\subsection{Approach}
+	This thesis aims to determine the most efficient model between the two competing models for unbiased parameter estimation. These are the ROLS and KF. My choice in regressor was  of slightly less importance than that of the level of bias in the estimation. The root mean squared error determines the better model. However, the loss function (L), the mean absolute error (MAE), and the out-of-sample (OOS) R2 are considered individually and as a whole to determine the better model (see empirical section[section number]). 
+	\subsection{Data and variable description}
+	The data include 30-years of monthly observations beginning January 1, 1990 to December 1, 2019. The ROLS model is univariate with only one predictor. I regress SP 500 returns on change in the VIX. Returns for GSPC and VIX open, high, low, and close price information are imported from Yahoo Finance. Both data sets are differenced once by a one-month lag to address unit roots. Data are calculated by dividing the current month’s adjusted closing price by the previous month’s adjusted closing price and then subtracting 1 from that value for the percentage change. 
+	
+	\subsection{Ordinary least squares}
+	When all assumptions hold OLS produces the best linear unbiased estimates (BLUE). However, when parameters are taken as time-variant, OLS estimates are no longer reliable. A modification the 'rolling' OLS is the ordinary least squares answer to the problem of TVPs. In OLS, the parameters are assumed constant. ROLS relaxes this assumption by regressing over a window of observations, size 10, at a time. The first 10 observations are reserved in order to establish a distribution from which to subtract from the mean. The window is then rolled forward one month, another regression is run with one new datum, and drops the last to maintain window size. The information lost in dropping the last observation is gained much as new information is gained with the one-step-ahead observations. Seemingly, this is a good estimation of TVPs, but in each window the parameters are assumed to be constant, which is not truly consistent. An advantage of the KF is that only the previous datum is needed to predict the next. ROLS needs at least 120 points to train the model with at least 10 observations for an initial distribution. The purpose of the current research is to examine whether the KF or ROLS is more efficient in estimating TVPs. My expectation is that the KF will outperform ROLS. 
+	
+		\subsection{State space representation of the univariate model}
+	In SSMs, it is assumed that the observed data are linearly generated from unobservable states within linear dynamical models (Luttinen, Raiko and Ilin, n.d.). An example of such a system is the temperature in a space shuttle’s combustion chamber, which is known to be in a constant state of flux. In this thesis, I examine linear dynamics that are changing continuously in time.
+	The univariate system model below outlines a system of first-order differential equations when taken together to form the SSM.
+	(The notation follows Commandeur and Koopman (2007):
+	
+	\begin{gather*} 
+		y_t = Z_t'a_t + \varepsilon_t, \\ 
+		a_t+1= T_ta_t + R_t\eta_t
+	\end{gather*}
+	
+	
+	The state equation maps the underlying hidden process to the observed measurement series. In the presence of observational noise resulting from measurement error, picking up a signal relating to the underlying process is difficult. SSMs explicitly account for that noise.
+
+	\subsection{Vector auto-regressive (1)}
+VAR(1) is used for its applicability of state-space models as well as OLS evaluation in comparing coefficient estimates of both models.
+	
+	\[ \beta_{t+1} =\beta_t + w_{t+1} \]
+	
+	%$	\begin{array}{1}\\
+	%	\beta_0\\
+	%	\beta_1
+	%	\end{array}
+	%	\]
+	%	$
+VAR is appropriate when the variables influence one another, as is the case of a and b. The VAR (1) is a linear state equation, a stochastic process following a random walk which estimates the parameters of the current estimate using only the previous estimate. The specification VAR(1) indicates the data regressed on copies of itself lagged one period. In this thesis each period and window are a month.
+The disadvantage of  VAR (1) as the state transition equation with linear observation equation is that noise is not considered in the parameter estimation , which may lead to an error-in-variables problem (Mader, Linke, Mader, Sommerlade, Timmer and Schelter, 2014). The aim of this thesis is to determine whether the KF with linear observation equation can improve forecasts. The state equation is set up as a VAR (1). The latent state variables  make up the vector beta and can be modeled as continuous variables following a random walk. 
+	
+
+	
+	
+
+	\subsection{Kalman filter}
+	 Notation follows Kim (2010):
+	
+	\begin{gather*} 
+	 \beta_{t+1}= A\beta_t + \epsilon_{t+1} \\
+	 y_{t+1}= H\beta_t + \varepsilon_{t+1}
+	 \end{gather*}
+	
+	 Perform grid search for hyperparameters. The diffuse method sets $\Omega$
+	 arbitrarily to [ ] \newline
+	 A ,H ,$\Omega$ ,R the hyperparameters, sometimes referred to as the design factors, must be estimated they are preset initially, outside of the model. Performance relies critically on the sensitivity of these values.  
+
+The Kalman gain (KG) is an internal calculation that decides where to place more weight, on either the estimate $\beta_{t+1} $ or the measurement $ y_t$. How it works.. 
+
+	Kalman gain calculation
+
+
+	\section{Empirical results}
+	
+	[unfinished]
+	\subsection{Markov chain Monte Carlo}
+	
+	\subsection{Diagnostic results}
+Tests
+	OOS $R^2$ is slightly larger than the in-sample $R^2$ because of a data-generating process (DGP) drift, which slowly evolves with time.The in-sample model that was fitted on the training data, is now slightly different from the process the OOS data are following.
+	
+	\section{Conclusion}
+	
+	This thesis aims to… \newline \newline ..answer research Questions: can forecasts involving unknown hidden parameters be improved with state-space techniques over traditional applications. Which model optimizes the forecast parameters?
+	
+	
+	I recommend that future research investigate unsupervised learning classification problems. I.e. the extreme value theorem and online novelty detection in estimating ETF/N's true prices in real time. Alternatively, natural language processing (NLP) a technique used to extract sentiment from live news to generate trade signals.
+	
+	[insert appendices, figures, tables]
+	
+	
+	
+	
+	
+	
+	\section{Appendix A: Source Code }
+	\subsubsection{EM algorithm}
+	\subsubsection{Kalman filter algorithm}
+	\subsubsection{Vector-autoregressive (1)}
+	\subsubsection{Rolling ordinary least squares}
+	\section{Appendix B: Figures}
+	\subsubsection{EM algorithm}
+	\subsubsection{Kalman filter algorithm}
+	
+	
+	
+
+	
+\end{document}
+
